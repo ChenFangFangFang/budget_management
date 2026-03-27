@@ -1,37 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 
 export default function ExpenseForm({ onExpenseAdded }) {
+  const SCENARIO_OPTIONS = ['超市', '外卖', '堂食', '住房', '购物', '交通', '其他']
+  
   const [formData, setFormData] = useState({
     amount: '',
     spender: 'Wang',
-    scenario: '',
+    scenario: '超市',
     expense_date: new Date().toISOString().split('T')[0]
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
-  const [scenarios, setScenarios] = useState([])
-
-  const fetchScenarios = async () => {
-    try {
-      const { data } = await supabase
-        .from('expenses')
-        .select('scenario')
-        .order('expense_date', { ascending: false })
-        .limit(50)
-      
-      if (data) {
-        const uniqueScenarios = [...new Set(data.map(item => item.scenario))]
-        setScenarios(uniqueScenarios)
-      }
-    } catch (err) {
-      console.error('Error fetching scenarios:', err)
-    }
-  }
-
-  useEffect(() => {
-    fetchScenarios()
-  }, [])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -73,7 +53,7 @@ export default function ExpenseForm({ onExpenseAdded }) {
       setFormData({
         amount: '',
         spender: 'Wang',
-        scenario: '',
+        scenario: '超市',
         expense_date: new Date().toISOString().split('T')[0]
       })
       
@@ -140,20 +120,16 @@ export default function ExpenseForm({ onExpenseAdded }) {
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Scenario
           </label>
-          <input
-            type="text"
+          <select
             name="scenario"
             value={formData.scenario}
             onChange={handleChange}
-            list="scenarios-list"
-            placeholder="e.g., Grocery, Dinner, Transport"
             className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-primary-500 focus:outline-none transition-colors"
-          />
-          <datalist id="scenarios-list">
-            {scenarios.map((scenario, index) => (
-              <option key={index} value={scenario} />
+          >
+            {SCENARIO_OPTIONS.map((option, index) => (
+              <option key={index} value={option}>{option}</option>
             ))}
-          </datalist>
+          </select>
         </div>
 
         {/* Date */}

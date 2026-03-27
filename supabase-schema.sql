@@ -8,7 +8,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE IF NOT EXISTS expenses (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     amount DECIMAL(10, 2) NOT NULL,
-    spender VARCHAR(50) NOT NULL CHECK (spender IN ('User A', 'User B')),
+    spender VARCHAR(50) NOT NULL CHECK (spender IN ('Wang', 'Chen')),
     scenario VARCHAR(255) NOT NULL,
     expense_date DATE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),

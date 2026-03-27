@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { usePinAuth } from '../hooks/usePinAuth'
 
-export default function PinScreen({ onAuthenticate }) {
+export default function PinScreen({ onAuthenticate, verifyPin }) {
   const [inputPin, setInputPin] = useState('')
-  const { verifyPin, error, hasPin } = usePinAuth()
+  const { error, hasPin, changePin } = usePinAuth()
   const [isChangingPin, setIsChangingPin] = useState(false)
   const [newPin, setNewPin] = useState('')
   const [confirmPin, setConfirmPin] = useState('')
@@ -21,7 +21,6 @@ export default function PinScreen({ onAuthenticate }) {
   const handleChangePin = (e) => {
     e.preventDefault()
     if (newPin.length === 4 && newPin === confirmPin) {
-      const { changePin } = usePinAuth()
       changePin(newPin)
       setIsChangingPin(false)
       setNewPin('')

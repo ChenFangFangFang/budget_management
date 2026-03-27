@@ -7,9 +7,8 @@ import SpendingByScenario from './components/SpendingByScenario'
 import SpendingBySpender from './components/SpendingBySpender'
 import MonthlyTrend from './components/MonthlyTrend'
 
-function Dashboard() {
+function Dashboard({ onLogout }) {
   const { expenses, loading, refreshExpenses, deleteExpense } = useExpenses()
-  const { logout } = usePinAuth()
 
   const handleExpenseAdded = () => {
     refreshExpenses()
@@ -29,11 +28,11 @@ function Dashboard() {
           <div>
             <h1 className="text-xl font-bold">Expense Tracker</h1>
             <p className="text-sm text-primary-100">
-              {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+              {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric' })}
             </p>
           </div>
           <button
-            onClick={logout}
+            onClick={onLogout}
             className="p-2 hover:bg-primary-700 rounded-lg transition-colors"
             aria-label="Logout"
           >
@@ -139,9 +138,9 @@ function Dashboard() {
 }
 
 function App() {
-  const { isAuthenticated } = usePinAuth()
+  const { isAuthenticated, verifyPin, logout } = usePinAuth()
 
-  return isAuthenticated ? <Dashboard /> : <PinScreen onAuthenticate={() => {}} />
+  return isAuthenticated ? <Dashboard onLogout={logout} /> : <PinScreen onAuthenticate={() => {}} verifyPin={verifyPin} />
 }
 
 export default App
