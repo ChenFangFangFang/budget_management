@@ -24,6 +24,14 @@ export default function BudgetAlert({ expenses }) {
   const isOverBudget = currentMonthTotal > monthlyBudget
   const isNearBudget = percentageUsed >= 80 && !isOverBudget
 
+  const handleBudgetChange = (e) => {
+    const value = e.target.value
+      .replace(/,/g, '.')
+      .replace(/[^0-9.]/g, '')
+      .replace(/(\..*)\./g, '$1')
+    setTempBudget(value.startsWith('.') ? '0' + value : value)
+  }
+
   const handleSaveBudget = async () => {
     const newBudget = parseFloat(tempBudget)
     if (newBudget > 0) {
@@ -112,9 +120,10 @@ export default function BudgetAlert({ expenses }) {
       {isEditing ? (
         <div className="flex gap-2 items-center">
           <input
-            type="number"
+            type="text"
+            inputMode="decimal"
             value={tempBudget}
-            onChange={(e) => setTempBudget(e.target.value)}
+            onChange={handleBudgetChange}
             className="flex-1 px-3 py-2 border-2 border-white rounded-lg focus:outline-none focus:border-primary-300"
           />
           <button

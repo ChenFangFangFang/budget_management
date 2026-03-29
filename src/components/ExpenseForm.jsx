@@ -15,9 +15,17 @@ export default function ExpenseForm({ onExpenseAdded }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target
+    let processedValue = value
+    if (name === 'amount') {
+      processedValue = value
+        .replace(/,/g, '.')
+        .replace(/[^0-9.]/g, '')
+        .replace(/(\..*)\./g, '$1')
+      if (processedValue.startsWith('.')) processedValue = '0' + processedValue
+    }
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: processedValue
     }))
     setError('')
   }
@@ -79,13 +87,11 @@ export default function ExpenseForm({ onExpenseAdded }) {
           <div className="relative">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-lg">€</span>
             <input
-              type="number"
+              type="text"
+              inputMode="decimal"
               name="amount"
               value={formData.amount}
               onChange={handleChange}
-              inputMode="decimal"
-              step="0.01"
-              min="0"
               placeholder="0.00"
               className="w-full pl-10 pr-4 py-4 text-2xl font-semibold border-2 border-gray-200 rounded-xl focus:border-primary-500 focus:outline-none transition-colors"
             />
