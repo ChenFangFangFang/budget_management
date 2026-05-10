@@ -6,6 +6,18 @@ export function useExpenses() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
+  const getCurrentMonthRange = () => {
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = now.getMonth()
+    const firstDay = new Date(year, month, 1)
+    const lastDay = new Date(year, month + 1, 0)
+    return {
+      firstDay: firstDay.toISOString().split('T')[0],
+      lastDay: lastDay.toISOString().split('T')[0]
+    }
+  }
+
   const fetchExpenses = useCallback(async () => {
     try {
       setLoading(true)
